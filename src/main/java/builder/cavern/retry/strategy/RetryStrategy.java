@@ -10,6 +10,7 @@ public class RetryStrategy {
     StopStrategy stopStrategy;
     SuccessStrategy successStrategy;
 
+    //todo 改为建造者模式
     public RetryStrategy(IntervalStrategy intervalStrategy, StopStrategy stopStrategy, SuccessStrategy successStrategy) {
         this.intervalStrategy = intervalStrategy;
         this.stopStrategy = stopStrategy;

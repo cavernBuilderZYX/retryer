@@ -6,54 +6,16 @@ import java.time.Duration;
  * @author cavernBuilder
  * @date 2022/2/23
  */
-public class TaskResult<T> implements Result<T> {
-
-
-    Exception exception;
-
-    T result;
-
-    Duration usedTime;
-
-
-
-    public TaskResult() {
-    }
-
-    @Override
-    public Duration getElapseTime() {
-        return usedTime;
-    }
-
-    @Override
-    public T getResult() {
-        return result;
-    }
-
-    @Override
-    public Exception getException() {
-        return exception;
-    }
+public class TaskResult<T> extends Result<T> {
 
     @Override
     public int getAttemptCount() {
         return 1;
     }
 
+    public TaskResult() {};
 
-    public TaskResult<T> setException(Exception exception) {
-        this.exception = exception;
-        return this;
+    public TaskResult(T result, Exception exception) {
+        super(result, exception);
     }
-
-    public TaskResult<T> setResult(T result) {
-        this.result = result;
-        return this;
-    }
-
-    public TaskResult<T> setUsedTime(Duration usedTime) {
-        this.usedTime = usedTime;
-        return this;
-    }
-
 }

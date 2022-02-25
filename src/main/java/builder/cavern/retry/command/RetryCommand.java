@@ -2,6 +2,7 @@ package builder.cavern.retry.command;
 
 
 import builder.cavern.retry.result.FinalResult;
+import builder.cavern.retry.result.ProcessResult;
 
 import java.util.concurrent.Callable;
 
@@ -9,19 +10,17 @@ import java.util.concurrent.Callable;
  * @author cavernBuilder
  * @date 2022/2/22
  */
-public abstract class RetryCommand {
+public abstract class RetryCommand<T> {
 
-    protected Runnable failureAction;
-    protected Runnable succeedAction;
-
+    public RetryCommand() {
+    }
 
     /**
      * 重试方法，得到返回值
      * @param callableTask
-     * @param <T>
      * @return
      */
-    public abstract <T> FinalResult<T> execute(Callable<T> callableTask);
+    public abstract FinalResult<T> execute(Callable<T> callableTask);
 
 
     /**
@@ -29,8 +28,8 @@ public abstract class RetryCommand {
      * @param runnableTask 重试任务
      * @return 结果
      */
-    public FinalResult<Void> execute(Runnable runnableTask) {
-        RunnableAdapter<Void> callableTask = new RunnableAdapter<>(runnableTask, null);
+    public FinalResult<T> execute(Runnable runnableTask) {
+        RunnableAdapter<T> callableTask = new RunnableAdapter<>(runnableTask, null);
         return execute(callableTask);
     }
 

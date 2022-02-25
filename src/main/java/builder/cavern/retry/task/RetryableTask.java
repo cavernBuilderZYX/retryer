@@ -4,6 +4,7 @@ import builder.cavern.retry.common.TaskState;
 import builder.cavern.retry.result.TaskResult;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.concurrent.Callable;
 
 /**
@@ -11,9 +12,9 @@ import java.util.concurrent.Callable;
  * @date 2022/2/22
  */
 public class RetryableTask<T> {
-    protected Callable<T> originalTask;
-    protected TaskState state;
-    protected TaskResult<T> taskResult;
+    Callable<T> originalTask;
+    TaskState state;
+    TaskResult<T> taskResult;
 
     public RetryableTask(Callable<T> originalTask) {
         this.originalTask = originalTask;
@@ -23,7 +24,7 @@ public class RetryableTask<T> {
 
     public TaskResult<T> runOneTime() {
         TaskResult<T> taskResult = new TaskResult<>();
-        long startTime = System.currentTimeMillis();
+        taskResult.setStartTime(LocalDateTime.now());
         try {
             this.state = TaskState.RUNNING;
             T result = originalTask.call();
@@ -31,14 +32,34 @@ public class RetryableTask<T> {
         } catch (Exception e) {
             taskResult.setException(e);
         } finally {
-            taskResult.setUsedTime(Duration.ofMillis(System.currentTimeMillis() - startTime));
+            taskResult.setEndTime(LocalDateTime.now());
             this.state = TaskState.FINISHED;
             this.taskResult = taskResult;
         }
         return taskResult;
     }
 
+    public Callable<T> getOriginalTask() {
+        return originalTask;
+    }
 
+    public TaskState getState() {
+        return state;
+    }
 
+    public TaskResult<T> getTaskResult() {
+        return taskResult;
+    }
 
+    public void setOriginalTask(Callable<T> originalTask) {
+        this.originalTask = originalTask;
+    }
+
+    public void setState(TaskState state) {
+        this.state = state;
+    }
+
+    public void setTaskResult(TaskResult<T> taskResult) {
+        this.taskResult = taskResult;
+    }
 }

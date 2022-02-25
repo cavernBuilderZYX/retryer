@@ -1,5 +1,6 @@
 package builder.cavern.retry.strategy;
 
+import builder.cavern.retry.result.ProcessResult;
 import builder.cavern.retry.result.TaskResult;
 
 import java.time.Duration;
@@ -11,9 +12,9 @@ import java.time.Duration;
 @FunctionalInterface
 public interface StopStrategy {
 
-    boolean shouldStop(TaskResult<?> taskResult);
+    boolean shouldStop(TaskResult<?> taskResult, ProcessResult<?> processResult);
 
-    StopStrategy NEVER_STOP = (taskResult) -> false;
+    StopStrategy NEVER_STOP = (taskResult, processResult) -> false;
 
     class StopWithLimitStrategy implements StopStrategy {
 
@@ -41,17 +42,17 @@ public interface StopStrategy {
         }
 
         @Override
-        public boolean shouldStop(TaskResult<?> taskResult) {
+        public boolean shouldStop(TaskResult<?> taskResult, ProcessResult<?> processResult) {
             if (maxTryCount == null && maxTryTime == null) {
                 return false;
             }
             if (maxTryCount == null) {
-                return taskResult.getElapseTime().compareTo(maxTryTime) > 0;
+                return processResult.getUsedTime().compareTo(maxTryTime) > 0;
             }
             if (maxTryTime == null) {
-                return taskResult.getAttemptCount() >= maxTryCount;
+                return processResult.getAttemptCount() >= maxTryCount;
             }
-            return taskResult.getAttemptCount() >= maxTryCount || taskResult.getElapseTime().compareTo(maxTryTime) > 0;
+            return processResult.getAttemptCount() >= maxTryCount || processResult.getUsedTime().compareTo(maxTryTime) > 0;
         }
     }
 

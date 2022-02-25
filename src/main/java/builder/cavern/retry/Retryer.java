@@ -1,6 +1,7 @@
 package builder.cavern.retry;
 
 import builder.cavern.retry.command.RetryCommand;
+import builder.cavern.retry.result.FinalResult;
 
 import java.util.concurrent.Callable;
 
@@ -11,13 +12,18 @@ import java.util.concurrent.Callable;
  */
 public class Retryer {
 
-    public static void retry(Runnable task, RetryCommand retryOption) {
-
+    public <T> FinalResult<T> retry(Runnable task, RetryCommand<T> retryCommand) {
+        try {
+            return retryCommand.execute(task);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public static <T> T retry(Callable<T> task, RetryCommand retryOption) {
+    public <T> FinalResult<T> retry(Callable<T> task, RetryCommand<T> retryCommand) {
         try {
-            return task.call();
+            return retryCommand.execute(task);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

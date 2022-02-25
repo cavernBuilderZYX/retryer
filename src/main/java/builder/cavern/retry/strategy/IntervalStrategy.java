@@ -1,5 +1,6 @@
 package builder.cavern.retry.strategy;
 
+import builder.cavern.retry.result.ProcessResult;
 import builder.cavern.retry.result.TaskResult;
 
 import java.time.Duration;
@@ -11,8 +12,8 @@ import java.time.Duration;
 @FunctionalInterface
 public interface IntervalStrategy {
 
-    Duration getNextInterval(TaskResult<?> lastTaskResult);
+    Duration getNextInterval(TaskResult<?> taskResult, ProcessResult<?> processResult);
 
-    IntervalStrategy NO_INTERVAL = lastTaskResult -> Duration.ZERO;
+    IntervalStrategy NO_INTERVAL = (taskResult, processResult) -> Duration.ZERO;
 
 }

@@ -1,8 +1,8 @@
 package builder.cavern.retry.command;
 
 import builder.cavern.retry.result.FinalResult;
+import builder.cavern.retry.result.ProcessResult;
 import builder.cavern.retry.result.TaskResult;
-import builder.cavern.retry.task.RetryableTask;
 
 import java.time.Duration;
 import java.util.concurrent.Callable;
@@ -11,20 +11,17 @@ import java.util.concurrent.Callable;
  * @author cavernBuilder
  * @date 2022/2/24
  */
-public class SimpleRetryCommand extends RetryCommand {
+public class SimpleRetryCommand<T> extends RetryCommand<T> {
     int times;
     Duration interval;
 
     @Override
-    public <T> FinalResult<T> execute(Callable<T> callableTask) {
+    public FinalResult<T> execute(Callable<T> callableTask) {
         boolean needToRetry = false;
         TaskResult<T> taskResult;
-        FinalResult<T> finalResult = null;
-        do {
-            SimpleRetryableTask<T> retryableTask = new SimpleRetryableTask<>(callableTask);
-            retryableTask.runOneTime();
-        } while (needToRetry);
-        return finalResult;
+        FinalResult<T> processResult = null;
+        //todo 待完成
+        return processResult;
     }
 
     public SimpleRetryCommand(int times) {
@@ -44,15 +41,5 @@ public class SimpleRetryCommand extends RetryCommand {
         }
         this.times = times;
         this.interval = interval;
-        this.failureAction = failureAction;
-        this.succeedAction = succeedAction;
-    }
-
-    static class SimpleRetryableTask<T> extends RetryableTask<T> {
-        public SimpleRetryableTask(Callable<T> originalTask) {
-            super(originalTask);
-        }
-
-
     }
 }
