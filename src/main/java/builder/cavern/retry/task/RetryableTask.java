@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 
 /**
  * @author cavernBuilder
- * @date 2022/2/22
+ * @since 2022/2/22
  */
 public class RetryableTask<T> {
     Callable<T> originalTask;

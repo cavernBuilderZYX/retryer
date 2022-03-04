@@ -14,12 +14,14 @@ import java.util.concurrent.Callable;
 
 /**
  * @author cavernBuilder
- * @date 2022/2/25
+ * @since 2022/2/25
  */
 public class CustomTaskRunner<T> extends TaskRunner<T>{
 
+    /**重试策略*/
     protected RetryStrategy retryStrategy;
 
+    /**过程节点重试动作*/
     protected Actions actions;
 
     public CustomTaskRunner(Callable<T> originalTask, RetryStrategy retryStrategy, Actions actions) {
@@ -40,6 +42,7 @@ public class CustomTaskRunner<T> extends TaskRunner<T>{
             TaskResult<T> taskResult = currentTask.runOneTime();
             processResult.changedByTaskResult(taskResult);
             //Once task succeeds, or runner fails and meets the conditions to stop, result is returned
+            //一旦任务成功， 则直接停止重试，返回结果
             boolean taskSucceeded = retryStrategy.getSuccessStrategy().succeed(taskResult);
             if (taskSucceeded) {
                 currentTask.state = TaskState.SUCCEEDED;
@@ -78,6 +81,6 @@ public class CustomTaskRunner<T> extends TaskRunner<T>{
             this.currentTask = new RetryableTask<>(currentTask.originalTask);
         } while (true);
         //复制成最终结果
-        return new FinalResult<>(processResult);
+        return new FinalResult<>(processResult, this.state.equals(RetryState.SUCCEEDED));
     }
 }

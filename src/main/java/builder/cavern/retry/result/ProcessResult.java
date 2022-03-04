@@ -1,11 +1,15 @@
 package builder.cavern.retry.result;
 
 /**
+ * 任务调度情况
  * @author cavernBuilder
- * @date 2022/2/23
+ * @since 2022/2/23
  */
 public class ProcessResult<T> extends Result<T> {
 
+    /**
+     * 到当前为止进行的尝试次数
+     */
     protected int attemptCount;
 
     @Override

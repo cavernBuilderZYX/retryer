@@ -7,15 +7,19 @@ import builder.cavern.retry.result.ProcessResult;
 import java.util.concurrent.Callable;
 
 /**
+ * 同一个原始任务多次运行、重试过程的调度和管理者
  * @author cavernBuilder
- * @date 2022/2/25
+ * @since 2022/2/25
  */
 public abstract class TaskRunner<T> {
 
+    /** 调度过程中间结果 */
     protected ProcessResult<T> processResult;
 
+    /** 当前调度运行的任务 */
     protected RetryableTask<T> currentTask;
 
+    /** 重试状态*/
     protected RetryState state;
 
 

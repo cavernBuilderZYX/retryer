@@ -1,27 +1,42 @@
 package builder.cavern.retry.command;
 
+import builder.cavern.retry.action.Actions;
+import builder.cavern.retry.common.RetryState;
 import builder.cavern.retry.result.FinalResult;
 import builder.cavern.retry.result.ProcessResult;
 import builder.cavern.retry.result.TaskResult;
+import builder.cavern.retry.strategy.IntervalStrategy;
+import builder.cavern.retry.strategy.RetryStrategy;
+import builder.cavern.retry.strategy.StopStrategy;
+import builder.cavern.retry.strategy.SuccessStrategy;
+import builder.cavern.retry.task.CustomTaskRunner;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.concurrent.Callable;
 
 /**
+ * 简单的重试命令，含重试次数和间隔
  * @author cavernBuilder
- * @date 2022/2/24
+ * @since 2022/2/24
  */
-public class SimpleRetryCommand<T> extends RetryCommand<T> {
+public class SimpleRetryCommand extends RetryCommand {
+    /**
+     * 最大尝试次数
+     */
     int times;
+    /**
+     * 两次尝试的时间间隔
+     */
     Duration interval;
 
     @Override
-    public FinalResult<T> execute(Callable<T> callableTask) {
-        boolean needToRetry = false;
-        TaskResult<T> taskResult;
-        FinalResult<T> processResult = null;
-        //todo 待完成
-        return processResult;
+    public <T> FinalResult<T> execute(Callable<T> callableTask) {
+        CustomTaskRunner<T> customTaskRunner = new CustomTaskRunner<T>(callableTask,
+                RetryStrategy.create().stopStrategy(StopStrategy.limit(times, null))
+                        .intervalStrategy(IntervalStrategy.constantInterval(interval)).successStrategy(SuccessStrategy.DEFAULT_NO_EXCEPTION).build(),
+                Actions.NONE);
+        return customTaskRunner.scheduleTask();
     }
 
     public SimpleRetryCommand(int times) {

@@ -2,25 +2,25 @@ package builder.cavern.retry.command;
 
 
 import builder.cavern.retry.result.FinalResult;
-import builder.cavern.retry.result.ProcessResult;
 
 import java.util.concurrent.Callable;
 
 /**
+ * 重试命令抽象类
  * @author cavernBuilder
- * @date 2022/2/22
+ * @since 2022/2/22
  */
-public abstract class RetryCommand<T> {
+public abstract class RetryCommand {
 
     public RetryCommand() {
     }
 
     /**
-     * 重试方法，得到返回值
-     * @param callableTask
-     * @return
+     * 运行和重试任务方法，得到返回值
+     * @param callableTask （最初的）重试任务
+     * @return 运行或重试任务的返回值
      */
-    public abstract FinalResult<T> execute(Callable<T> callableTask);
+    public abstract <T> FinalResult<T> execute(Callable<T> callableTask);
 
 
     /**
@@ -28,12 +28,16 @@ public abstract class RetryCommand<T> {
      * @param runnableTask 重试任务
      * @return 结果
      */
-    public FinalResult<T> execute(Runnable runnableTask) {
-        RunnableAdapter<T> callableTask = new RunnableAdapter<>(runnableTask, null);
+    public  FinalResult<Void> execute(Runnable runnableTask) {
+        RunnableAdapter<Void> callableTask = new RunnableAdapter<>(runnableTask, null);
         return execute(callableTask);
     }
 
 
+    /**
+     * 把Runnable包装成callable的适配器，从JDK中复制而来
+     * @param <T> Callable的返回类型
+     */
     protected static final class RunnableAdapter<T> implements Callable<T> {
         private final Runnable task;
         private final T result;

@@ -1,10 +1,9 @@
 package builder.cavern.retry.result;
 
-import java.time.Duration;
-
 /**
+ * 单次任务运行结果
  * @author cavernBuilder
- * @date 2022/2/23
+ * @since 2022/2/23
  */
 public class TaskResult<T> extends Result<T> {
 

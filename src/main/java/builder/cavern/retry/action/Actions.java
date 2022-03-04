@@ -1,16 +1,25 @@
 package builder.cavern.retry.action;
 
 /**
- * 节点动作
+ * 重试过程中的节点动作
  * @author cavernBuilder
- * @date 2022/2/25
+ * @since 2022/2/25
  */
 public class Actions {
 
+    /**
+     * 任务执行成功后的回调动作
+     */
     private Runnable succeededAction;
 
+    /**
+     * 运行、重试的最终失败后的回调动作
+     */
     private Runnable finalFailureAction;
 
+    /**
+     * 单次任务失败后的回调操作
+     */
     private TaskFailureAction taskFailureAction;
 
     private Actions(ActionsBuilder actionsBuilder) {
@@ -18,6 +27,8 @@ public class Actions {
         this.finalFailureAction = actionsBuilder.finalFailureAction;
         this.taskFailureAction = actionsBuilder.taskFailureAction;
     }
+
+    public static final Actions NONE = Actions.create().build();
 
     public static ActionsBuilder create() {
         return new ActionsBuilder();

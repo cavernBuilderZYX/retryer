@@ -4,17 +4,30 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 /**
+ * 抽象任务结果类
  * @author cavernBuilder
- * @date 2022/2/25
+ * @since 2022/2/25
  */
 public abstract class Result<T> {
 
+    /**
+     * 原始任务的运行结果
+     */
     protected T result;
 
+    /**
+     * 任务运行时抛出的异常
+     */
     protected Exception exception;
 
+    /**
+     * 起始时间
+     */
     protected LocalDateTime startTime;
 
+    /**
+     * 任务或过程的结束时间
+     */
     protected LocalDateTime endTime;
 
     public Result() {};

@@ -6,16 +6,33 @@ import builder.cavern.retry.result.TaskResult;
 import java.time.Duration;
 
 /**
+ * 重试失败停止策略
  * @author cavernBuilder
- * @date 2022/2/23
+ * @since 2022/2/23
  */
 @FunctionalInterface
 public interface StopStrategy {
 
+    /**
+     * 当前是否应该停止重试，返回结果
+     * @param taskResult 单次任务调度结果
+     * @param processResult 调度（重试）任务执行中间结果
+     * @return 是否立刻停止重试
+     */
     boolean shouldStop(TaskResult<?> taskResult, ProcessResult<?> processResult);
 
+    /**
+     * 有永不停止策略。慎用。
+     */
     StopStrategy NEVER_STOP = (taskResult, processResult) -> false;
 
+    public static StopStrategy limit(Integer maxTryCount, Duration maxTryTime) {
+        return new StopWithLimitStrategy(maxTryCount, maxTryTime);
+    }
+
+    /**
+     * 带最大重试次数和最大重试时间的停止策略类
+     */
     class StopWithLimitStrategy implements StopStrategy {
 
         Integer maxTryCount;
