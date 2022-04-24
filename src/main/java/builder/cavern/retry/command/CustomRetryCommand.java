@@ -22,8 +22,8 @@ public class CustomRetryCommand extends RetryCommand {
 
     /**
      * 使用重试策略和节点动作初始化自定义的重试命令。方法保证传参的鲁棒性。
-     * @param retryStrategy
-     * @param actions
+     * @param retryStrategy 重试策略
+     * @param actions 要执行的任务动作
      */
     public CustomRetryCommand(RetryStrategy retryStrategy, Actions actions) {
         if (retryStrategy == null) {

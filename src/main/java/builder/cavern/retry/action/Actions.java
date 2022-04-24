@@ -10,17 +10,17 @@ public class Actions {
     /**
      * 任务执行成功后的回调动作
      */
-    private Runnable succeededAction;
+    private final Runnable succeededAction;
 
     /**
      * 运行、重试的最终失败后的回调动作
      */
-    private Runnable finalFailureAction;
+    private final Runnable finalFailureAction;
 
     /**
      * 单次任务失败后的回调操作
      */
-    private TaskFailureAction taskFailureAction;
+    private final TaskFailureAction taskFailureAction;
 
     private Actions(ActionsBuilder actionsBuilder) {
         this.succeededAction = actionsBuilder.succeededAction;
