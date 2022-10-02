@@ -4,28 +4,32 @@
 
 Retrier 名为重试器，目的是为了封装简化业务开发中的重试操作。实际开发中，在调用远程Http服务、发送消息、抢占资源等情况下都有可能失败，而不同的业务场景对重试的具体操作条件和步骤有不同的要求。Retrier 尝试提供统一的重试api，方便多样的业务情况下便捷地进行重试调用。
 
-
-
 ## 功能
 
 - 最大次数重试
 - 最大时长重试
 - 含最大时长限制的最大次数重试
-- 可选的单个任务执行时间记录
-- 可选的单个任务异常保存
 - 重试条件自定义
-- 支持异步重试，支持重试信息的实时获取
-
-
+- 支持重试结果和附加信息的获取
 
 ## 设计特点
 
 遵循面向对象编程规范，遵循设计模式，但不可以增加系统的复杂度
+
 1. api简单易用，无多余功能
 2. 支持多种重试策略的配置，包括默认简单策略和自定义复杂策略
 3. 线程安全，占用资源小
 
+## UML
 
+Retryer关系图：
 
-## UML 类图
+![Retryer关系图](C:\Users\freemasonzyx\Desktop\retryer文档\Retryer关系图.svg)
 
+状态图：
+
+![Retryer状态图](C:\Users\freemasonzyx\Desktop\retryer文档\Retryer状态图.svg)
+
+时序图：
+
+![Retryer时序图](C:\Users\freemasonzyx\Desktop\retryer文档\Retryer时序图.svg)
