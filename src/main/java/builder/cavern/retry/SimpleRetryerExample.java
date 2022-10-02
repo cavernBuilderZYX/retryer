@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit;
 
 /**
  * 简单重试示例
- * @author 周逸轩
+ * @author cavernBuilder
  * @since 2022/3/3 12:57
  */
 public class SimpleRetryerExample {

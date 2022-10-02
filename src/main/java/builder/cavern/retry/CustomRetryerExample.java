@@ -20,19 +20,21 @@ public class CustomRetryerExample {
 
     public static void main(String[] args) {
         Retryer retryer = new Retryer();
-        RetryStrategy retryStrategy = RetryStrategy.create().intervalStrategy((taskResult, processResult) -> Duration.of(1, ChronoUnit.SECONDS))
-                .stopStrategy( new StopStrategy.StopWithLimitStrategy(4))
+        RetryStrategy retryStrategy = RetryStrategy.create()
+                .intervalStrategy((taskResult, processResult) -> Duration.of(processResult.getAttemptCount(), ChronoUnit.SECONDS))
+                .stopStrategy( new StopStrategy.StopWithLimitStrategy(5))
                 .successStrategy(SuccessStrategy.DEFAULT_NO_EXCEPTION)
                 .build();
         RetryCommand retryCommand = new CustomRetryCommand(retryStrategy, Actions.create()
                 .taskFailureAction(((taskResult, processResult) -> System.out.println("Exception:" + taskResult.getException())))
+                .finalFailureAction(() -> System.out.println("任务最终失败了！"))
                 .build());
         retryer.retry(new CustomRetryerExample()::testMethod, retryCommand);
     }
 
     void testMethod() {
         ++times;
-        if (times < 3) {
+        if (times < 5) {
             throw new IllegalStateException("错误了！times为：" + times);
         }
         System.out.println("运行正常！times为：" + times);
