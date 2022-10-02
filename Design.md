@@ -24,12 +24,12 @@ Retrier 名为重试器，目的是为了封装简化业务开发中的重试操
 
 Retryer关系图：
 
-![Retryer关系图](picture\Retryer关系图.svg)
+![Retryer关系图](picture/Retryer关系图.svg)
 
 状态图：
 
-![Retryer状态图](picture\Retryer状态图.svg)
+![Retryer状态图](picture/Retryer状态图.svg)
 
 时序图：
 
-![Retryer时序图](picture\Retryer时序图.svg)
+![Retryer时序图](picture/Retryer时序图.svg)
